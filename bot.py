@@ -44,6 +44,7 @@ async def send_welcome(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler()
 async def send_welcome(callback_query: types.CallbackQuery):
+    print(callback_query)
     await bot.answer_callback_query(callback_query.id, url=url)
 
 if __name__ == '__main__':
