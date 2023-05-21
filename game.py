@@ -1,6 +1,12 @@
 from flask import Flask, jsonify, render_template, request
 
+
 app = Flask(__name__)
+
+ssl_cert = '/etc/letsencrypt/live/facegame.tw1.ru/fullchain.pem'
+
+
+
 
 @app.route('/')
 def index():
@@ -19,4 +25,5 @@ def start_game():
         return jsonify(data=response, ensure_ascii=False)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=443, ssl_context=('/etc/letsencrypt/live/facegame.tw1.ru/fullchain.pem',
+					 '/etc/letsencrypt/live/facegame.tw1.ru/privkey.pem'))
