@@ -1,0 +1,6 @@
+.color-change-btn {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    transition: background-color 0.3s ease;
+  }

@@ -1,30 +1,138 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <title>Изменение цвета по нажатию</title>
+  <script src="../static/script.js"></script>
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+  <button class="color-change-btn" onclick="changeColor()"></button>
+</body>
+</html> -->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Уворот от падающих объектов</title>
   <style>
-    .color-change-btn {
-      width: 100px;
-      height: 100px;
+    #game-container {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      border: 1px solid black;
+      overflow: hidden;
+    }
+    .player {
+      width: 50px;
+      height: 50px;
+      background-color: blue;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .object {
+      width: 20px;
+      height: 20px;
       background-color: red;
-      transition: background-color 0.3s ease;
+      position: absolute;
     }
   </style>
 </head>
 <body>
-  <button class="color-change-btn" onclick="changeColor()"></button>
+  <div id="game-container">
+    <div class="player"></div>
+  </div>
 
   <script>
-    function changeColor() {
-      var btn = document.querySelector('.color-change-btn');
-      var currentColor = btn.style.backgroundColor;
+    // Получаем ссылки на элементы DOM
+    const gameContainer = document.getElementById('game-container');
+    const player = document.querySelector('.player');
 
-      if (currentColor === 'red') {
-        btn.style.backgroundColor = 'blue';
-      } else {
-        btn.style.backgroundColor = 'red';
+    let gameScore = 0; // Счетчик игры
+
+    // Функция для обновления счетчика игры на странице
+    function updateScore() {
+      document.getElementById('score').textContent = gameScore;
+    }
+
+    // Функция для создания падающих объектов
+    function createObject() {
+      const object = document.createElement('div');
+      object.classList.add('object');
+      object.style.left = `${Math.random() * (gameContainer.offsetWidth - 20)}px`;
+      gameContainer.appendChild(object);
+
+      // Анимация падения объекта
+      let objectInterval = setInterval(() => {
+        const currentTop = object.offsetTop;
+        object.style.top = `${currentTop + 1}px`;
+
+        // Проверяем столкновение объекта с игроком
+        if (
+          currentTop + 20 >= gameContainer.offsetHeight &&
+          parseInt(object.style.left) >= player.offsetLeft - 20 &&
+          parseInt(object.style.left) <= player.offsetLeft + 50
+        ) {
+          clearInterval(objectInterval);
+          gameContainer.removeChild(object);
+          gameScore++;
+          updateScore();
+        }
+
+        // Проверяем, достиг ли объект нижней границы контейнера
+        if (currentTop + 20 >= gameContainer.offsetHeight) {
+          clearInterval(objectInterval);
+          gameContainer.removeChild(object);
+        }
+      }, 10);
+    }
+
+    // Обработчик события нажатия клавиш
+    function handleKeyPress(event) {
+      const playerLeft = player.offsetLeft;
+      const gameContainerWidth = gameContainer.offsetWidth;
+
+      // Перемещаем игрока влево или вправо при нажатии клавиш влево или вправо
+      if (event.key === 'ArrowLeft' && playerLeft > 0) {
+        player.style.left = `${playerLeft - 10}px`;
+      } else if (event.key === 'ArrowRight' && playerLeft < gameContainerWidth - 50) {
+        player.style.left = `${playerLeft + 10}px`;
       }
     }
+
+    // Обработчик события прикосновения
+    function handleTouch(event) {
+      const playerLeft = player.offsetLeft;
+      const gameContainerWidth = gameContainer.offsetWidth;
+
+      // Получаем горизонтальную позицию касания
+      const touchX = event.changedTouches[0].clientX;
+
+      // Перемещаем игрока влево или вправо в зависимости от позиции касания
+      if (touchX < playerLeft + 25 && playerLeft > 0) {
+        player.style.left = `${playerLeft - 10}px`;
+      } else if (touchX > playerLeft + 25 && playerLeft < gameContainerWidth - 50) {
+        player.style.left = `${playerLeft + 10}px`;
+      }
+    }
+
+    // Начинаем игру при загрузке страницы
+    window.onload = function() {
+      // Добавляем обработчики событий
+      document.addEventListener('keydown', handleKeyPress);
+      document.addEventListener('touchstart', handleTouch);
+      document.addEventListener('touchmove', handleTouch);
+
+      // Создаем падающие объекты с интервалом
+      setInterval(createObject, 1000);
+    };
   </script>
 </body>
 </html>
+
