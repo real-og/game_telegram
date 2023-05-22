@@ -1,6 +1,31 @@
-.color-change-btn {
-    width: 100px;
-    height: 100px;
-    background-color: red;
-    transition: background-color 0.3s ease;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-image: url('../static/images/washington.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+#game-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+#player {
+  width: 50px;
+  height: 50px;
+  background-color: #f00;
+  position: absolute;
+  bottom: 10px;
+  left: calc(50% - 25px);
+}
+
+.falling-object {
+  width: 20px;
+  height: 20px;
+  background-color: #000;
+  position: absolute;
+}
