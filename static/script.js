@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const gameContainer = document.getElementById("game-container");
 
   let playerX = gameContainer.offsetWidth / 2 - player.offsetWidth / 2;
+  let createdFallingElements = 0;
+  let timeoutToFall = 400
+  
 
   document.addEventListener("keydown", (event) => {
       if (event.code === "ArrowLeft") {
@@ -22,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function createFallingObject() {
+    createdFallingElements++;
+      console.log(timeoutToFall); 
       const object = document.createElement("div");
       object.className = "falling-object";
 
@@ -49,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
               playerLeft <= objectLeft && objectLeft <= playerRight)
           ) {
               clearInterval(fallingObjectInterval);
-              alert("Игра окончена!");
+              alert("Простоял: " + createdFallingElements + " квадратов");
               location.reload();
           }
 
@@ -60,9 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
               object.style.top = object.offsetTop + 10 + "px";
           }
       }, 50);
-
+      if (createdFallingElements % 10 ==0) {
+        
+        timeoutToFall = Math.round(timeoutToFall * 0.9);
+      }
     // here we change amount of falling objects
-      setTimeout(createFallingObject, 100);
+      setTimeout(createFallingObject, timeoutToFall);
   }
 
   createFallingObject();
