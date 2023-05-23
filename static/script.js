@@ -24,6 +24,24 @@ document.addEventListener("DOMContentLoaded", () => {
       player.style.left = playerX + "px";
   });
 
+  document.addEventListener("touchstart", (event) => {
+    const touchX = event.touches[0].clientX; // Получение координаты X касания
+    const screenWidth = window.innerWidth; // Получение ширины экрана
+
+    if (touchX < screenWidth / 2) {
+      playerX -= 25; // Движение влево
+    } else {
+      playerX += 25; // Движение вправо
+    }
+    if (playerX < 0) {
+      playerX = 0;
+    } else if (playerX > gameContainer.offsetWidth - player.offsetWidth) {
+      playerX = gameContainer.offsetWidth - player.offsetWidth;
+    }
+    // Обновление позиции игрока
+    player.style.left = `${playerX}px`;
+  });
+
   function createFallingObject() {
     createdFallingElements++;
       console.log(timeoutToFall); 
