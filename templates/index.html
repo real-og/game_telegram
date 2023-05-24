@@ -5,10 +5,19 @@
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
 </head>
 <body>
-  <div id="counter"></div>
+  <div id="scorebox">Score: <span id="score">0</span></div>
+  <div id="levebox">Level: <span id="level">0</span></div>
+  
     <div id="game-container">
       <img id="player" src="../static/images/sania_head.png" alt="Player">
     </div>
+    <div id="game-over-overlay">
+      <div id="game-over-box">
+          <h2>Игра окончена!</h2>
+          <p>Ваш счет: <span id="game-over-score">0</span></p>
+          <button id="play-again-button">Играть еще раз</button>
+      </div>
+  </div>
 
     <script src="../static/script.js"></script>
 </body>
