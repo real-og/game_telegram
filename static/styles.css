@@ -31,7 +31,7 @@ body {
   position: absolute;
 }
 
-#game-over-overlay {
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -43,9 +43,20 @@ body {
   align-items: center;
 }
 
-#game-over-box {
+.box {
   background-color: white;
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+}
+
+.leaderboard-table {
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 10px;
+  border: 1px solid black;
 }

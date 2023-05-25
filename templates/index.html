@@ -3,23 +3,45 @@
 <head>
     <title>Уворачивайся!</title>
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <link rel="icon" type="image/x-icon" href="../static/images/sania_fav.jpg">
 </head>
 <body>
+  <audio id="background-music" src="../static/ audio/pulp_fiction.mp3" loop autoplay></audio>
   <div id="scorebox">Score: <span id="score">0</span></div>
   <div id="levebox">Level: <span id="level">0</span></div>
-  
-    <div id="game-container">
-      <img id="player" src="../static/images/sania_head.png" alt="Player">
-    </div>
-    <div id="game-over-overlay">
-      <div id="game-over-box">
-          <h2>Игра окончена!</h2>
-          <p>Ваш счет: <span id="game-over-score">0</span></p>
-          <button id="play-again-button">Играть еще раз</button>
-      </div>
+  <div id="game-container">
+    <img id="player" src="../static/images/sania_head.png" alt="Player">
   </div>
 
-    <script src="../static/script.js"></script>
+  <div id="game-over-overlay" class="overlay">
+    <div id="game-over-box" class="box">
+      <h2>Игра окончена!</h2>
+      <p>Ваш счет: <span id="game-over-score">0</span></p>
+      <table class="leaderboard-table">
+        <tr>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </table>
+      <button id="play-again-button">Играть еще раз</button>
+    </div>
+  </div>
+
+  <div id="prepare-game-overlay" class="overlay">
+    <div id="prepare-game-box" class="box">
+      <h2>Победи их!</h2>
+      <table class="leaderboard-table">
+        <tr>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </table>
+      <button id="play-button">Играть</button>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="../static/script.js"></script>
 </body>
 </html>
 

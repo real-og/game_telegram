@@ -11,9 +11,37 @@ function preventDoubleTapZoom() {
 
 preventDoubleTapZoom();
 
+// Функция для получения данных таблицы лидеров
+function fetchHighScores() {
+  $.ajax({
+    url: 'http://127.0.0.1:5000/highscores',
+    method: 'GET',
+    dataType: 'json',
+    success: function(response) {
+
+      var table = $('.leaderboard-table'); 
+      table.empty(); 
+
+      var tableHeader = $('<tr><th>Name</th><th>Score</th></tr>');
+      table.append(tableHeader);
+
+      response.forEach(function(item) {
+        var row = $('<tr><td>' + item.name + '</td><td>' + item.score + '</td></tr>');
+        table.append(row);
+      });
+    },
+    error: function(xhr, status, error) {
+      console.log('Error: ' + error);
+    }
+  });
+}
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const player = document.getElementById("player");
   const gameContainer = document.getElementById("game-container");
+  const backgroundMusic = document.getElementById('background-music');
 
   let playerX = gameContainer.offsetWidth / 2 - player.offsetWidth / 2;
   let createdFallingElements = 0;
@@ -65,9 +93,20 @@ function handleTouch(event) {
   player.style.left = `${playerX}px`;
 }
 
+function prepareGame() {
+  isGameOver = true;
 
+  const prepareGameOverlay = document.getElementById("prepare-game-overlay");
+  prepareGameOverlay.style.display = "flex";
+
+  fetchHighScores()
+
+  const playButton = document.getElementById("play-button");
+  playButton.addEventListener("click", resetGame);
+}
 
 function gameOver() {
+  backgroundMusic.pause();
   console.log('game over');
   isGameOver = true;
 
@@ -78,6 +117,8 @@ function gameOver() {
   // Выводим счет игрока
   const scoreText = document.getElementById("game-over-score");
   scoreText.textContent = score;
+
+  fetchHighScores()
 
   // Обработчик для кнопки "Играть снова"
   const playAgainButton = document.getElementById("play-again-button");
@@ -101,6 +142,9 @@ function resetGame() {
 
     const gameOverOverlay = document.getElementById("game-over-overlay");
     gameOverOverlay.style.display = "none";
+    const prepareGameOverlay = document.getElementById("prepare-game-overlay");
+    prepareGameOverlay.style.display = "none";
+    backgroundMusic.play();
     createFallingObject();
     // location.reload()
 }
@@ -175,5 +219,6 @@ function resetGame() {
       setTimeout(createFallingObject, timeoutToFall);
   }
 
+  prepareGame()
   createFallingObject();
 });
