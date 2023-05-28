@@ -1,7 +1,11 @@
 from flask import Flask, jsonify, render_template, request
+from flask_cors import CORS
+import logic
+import db
 
 
 app = Flask(__name__)
+CORS(app)
 
 ssl_cert_path = '/etc/letsencrypt/live/facegame.tw1.ru/fullchain.pem'
 ssl_key_path = '/etc/letsencrypt/live/facegame.tw1.ru/privkey.pem'
@@ -13,18 +17,14 @@ def index():
 
 @app.route('/highscores', methods=['GET'])
 def send_json():
-    response = [
-            { 'name': 'traher',
-              'score' : 400,
-            },
-            { 'name': 'johnny',
-              'score' : 364,
-            },
-            { 'name': 'billy',
-              'score' : 51,
-            },
-        ]
-    
+    response = logic.get_high_scores_formated()
+    return jsonify(response)
+
+@app.route('/set_score', methods=['POST'])
+def set_score():
+    data = request.get_json()
+    db.add_run(data.get('score'), data.get('name'), data.get('id_tg'))
+    response = logic.get_high_scores_formated()
     return jsonify(response)
 
 

@@ -11,10 +11,12 @@ function preventDoubleTapZoom() {
 
 preventDoubleTapZoom();
 
+
 // Функция для получения данных таблицы лидеров
 function fetchHighScores() {
   $.ajax({
     url: 'https://facegame.tw1.ru/highscores',
+    // url: 'http://127.0.0.1:5000/highscores',
     method: 'GET',
     dataType: 'json',
     success: function(response) {
@@ -42,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const player = document.getElementById("player");
   const gameContainer = document.getElementById("game-container");
   const backgroundMusic = document.getElementById('background-music');
+  const playerNameInput = document.getElementById('player-name');
 
   let playerX = gameContainer.offsetWidth / 2 - player.offsetWidth / 2;
   let createdFallingElements = 0;
@@ -106,6 +109,9 @@ function prepareGame() {
 }
 
 function gameOver() {
+  if (isGameOver == true) {
+    return;
+  }
   backgroundMusic.pause();
   console.log('game over');
   isGameOver = true;
@@ -117,18 +123,69 @@ function gameOver() {
   // Выводим счет игрока
   const scoreText = document.getElementById("game-over-score");
   scoreText.textContent = score;
+  
+  const data = {
+    name: playerNameInput.value.trim(),
+    score: score
+  };
+  
+  // fetch('http://localhost:5000/set_score', {
+  fetch('https://facegame.tw1.ru/set_score', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }).then(response => response.json())
+    .then(data => {
+  
+      var table = $('.leaderboard-table'); 
+      table.empty(); 
 
-  fetchHighScores()
+      var tableHeader = $('<tr><th>Name</th><th>Score</th></tr>');
+      table.append(tableHeader);
+
+      data.forEach(function(item) {
+        var row = $('<tr><td>' + item.name + '</td><td>' + item.score + '</td></tr>');
+        table.append(row);
+      });
+    
+    })
+    .catch(error => {
+      console.error('Ошибка:', error);
+    });
+
+
 
   // Обработчик для кнопки "Играть снова"
   const playAgainButton = document.getElementById("play-again-button");
   playAgainButton.addEventListener("click", resetGame);
 }
 
+playerNameInput.addEventListener('input', handleInputChange);
+
+// Функция обработки изменения значения в поле ввода
+const startButton = document.getElementById('play-button');
+startButton.disabled = true;
+function handleInputChange() {
+  const playerName = playerNameInput.value.trim(); // Получаем введенное имя и удаляем лишние пробелы
+
+  if (playerName.length > 0) {
+    startButton.disabled = false; // Разрешаем нажатие кнопки, если поле не пустое
+  } else {
+    startButton.disabled = true; // Блокируем нажатие кнопки, если поле пустое
+  }
+}
 
 // Функция для сброса игры
 function resetGame() {
     console.log('reset game');
+
+    const playerName = playerNameInput.value.trim(); 
+    if (playerName.length == 0) {
+      alert('Пожалуйста, введите ваше имя');      
+    }
+
     createdFallingElements = 0;
     timeoutToFall = 400;
     level = 1;

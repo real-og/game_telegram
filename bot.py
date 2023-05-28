@@ -1,6 +1,7 @@
 import os
 from aiogram.types import InlineQueryResultGame
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 from aiogram import Bot, Dispatcher, executor, types
@@ -20,7 +21,12 @@ API_TOKEN = str(os.environ.get('BOT_TOKEN'))
 
 url = str(os.environ.get('GAME_URL'))
 game_short_name = 'high_tech_park'
+
+
+# storage = RedisStorage2(db=10)
 storage = MemoryStorage()
+
+
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=storage)
 
@@ -30,15 +36,13 @@ class State(StatesGroup):
     set_characters = State()
     playing = State()
 
-# @dp.inline_handler()
-# async def send_game(inline_query: types.InlineQuery):
-#     await bot.answer_inline_query(inline_query.id,
-#                                   [InlineQueryResultGame(id=str(uuid4()), 
-#                                                          game_short_name=game_short_name)])
-
+                                                   
 @dp.message_handler(commands=['start'], state="*")
 async def send_welcome(message: types.Message, state: FSMContext):
     chat_id = message.from_user.id
+    data = await state.get_data()
+    if data.get('highscore') is None:
+        await state.update_data(highscore=0)
     await bot.send_game(chat_id=chat_id, game_short_name='high_tech_park')
 
 
