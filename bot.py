@@ -19,7 +19,8 @@ logging.basicConfig(#filename="sample.log",
 
 API_TOKEN = str(os.environ.get('BOT_TOKEN'))
 
-url = str(os.environ.get('GAME_URL'))
+# url = str(os.environ.get('GAME_URL'))
+url = 'https://facegame.tw1.ru'
 game_short_name = 'high_tech_park'
 
 
