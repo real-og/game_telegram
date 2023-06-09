@@ -13,6 +13,7 @@ ssl_key_path = '/etc/letsencrypt/live/facegame.tw1.ru/privkey.pem'
 
 @app.route('/')
 def index():
+    print(request.args)
     return render_template('index.html')
 
 @app.route('/highscores', methods=['GET'])
@@ -24,6 +25,7 @@ def send_json():
 def set_score():
     data = request.get_json()
     db.add_run(data.get('score'), data.get('name'), data.get('id_tg'))
+    logic.set_score()
     response = logic.get_high_scores_formated()
     return jsonify(response)
 
