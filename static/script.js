@@ -41,6 +41,12 @@ function fetchHighScores() {
 
 
 document.addEventListener("DOMContentLoaded", () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const query = searchParams.get('q');
+  console.log(query)
+
+
+
   const player = document.getElementById("player");
   const gameContainer = document.getElementById("game-container");
   const backgroundMusic = document.getElementById('background-music');
