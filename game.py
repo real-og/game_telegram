@@ -26,7 +26,7 @@ def send_json():
 def set_score():
     data = request.get_json()
     db.add_run(data.get('score'), data.get('name'), data.get('id_tg'))
-    logic.set_score()
+    # logic.set_score()
     response = logic.get_high_scores_formated()
     return jsonify(response)
 
