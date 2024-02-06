@@ -42,27 +42,22 @@ class State(StatesGroup):
 async def send_welcome(message: types.Message, state: FSMContext):
     chat_id = message.from_user.id
     data = await state.get_data()
-    # score = await bot.get_game_high_scores(user_id=chat_id)
     if data.get('highscore') is None:
         await state.update_data(highscore=0)
     message = await bot.send_game(chat_id=chat_id, game_short_name='high_tech_park')
-    print(message)
+
 
 @dp.message_handler(commands=['set'], state="*")
 async def send_welcome(message: types.Message, state: FSMContext):
     chat_id = message.from_user.id
 
 
-    score = await bot.set_game_score(user_id=chat_id, chat_id=chat_id, message_id=361, score=3)
-    print(score)
 
-    
-    print(message)
+
 
 
 @dp.callback_query_handler()
 async def send_welcome(callback_query: types.CallbackQuery):
-    print(callback_query)
     await bot.answer_callback_query(callback_query.id, url=url)
 
 if __name__ == '__main__':
