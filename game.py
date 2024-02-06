@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
+import os
 import logic
 import db
 
@@ -7,8 +8,8 @@ import db
 app = Flask(__name__)
 CORS(app)
 
-ssl_cert_path = '/etc/letsencrypt/live/facegame.tw1.ru/fullchain.pem'
-ssl_key_path = '/etc/letsencrypt/live/facegame.tw1.ru/privkey.pem'
+ssl_cert_path = str(os.environ.get('ssl_cert_path'))
+ssl_key_path = str(os.environ.get('ssl_key_path'))
 
 
 @app.route('/')
@@ -31,5 +32,5 @@ def set_score():
 
 
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=443, ssl_context=(ssl_cert_path, ssl_key_path))
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=443, ssl_context=(ssl_cert_path, ssl_key_path))
+    # app.run(host='0.0.0.0')
