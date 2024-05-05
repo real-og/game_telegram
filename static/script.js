@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const player = document.getElementById("player");
   const gameContainer = document.getElementById("game-container");
-  const backgroundMusic = document.getElementById('background-music');
+  // const backgroundMusic = document.getElementById('background-music');
   const playerNameInput = document.getElementById('player-name');
 
   let playerX = gameContainer.offsetWidth / 2 - player.offsetWidth / 2;
@@ -118,7 +118,7 @@ function gameOver() {
   if (isGameOver == true) {
     return;
   }
-  backgroundMusic.pause();
+  // backgroundMusic.pause();
   console.log('game over');
   isGameOver = true;
 
@@ -207,7 +207,7 @@ function resetGame() {
     gameOverOverlay.style.display = "none";
     const prepareGameOverlay = document.getElementById("prepare-game-overlay");
     prepareGameOverlay.style.display = "none";
-    backgroundMusic.play();
+    // backgroundMusic.play();
     createFallingObject();
     // location.reload()
 }
